@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>
+       input,textarea{
+         border-top-style: hidden;
+         border-right-style: hidden;
+         border-left-style: hidden;
+         background-color: #eee;
+       }
+       .no-outline:focus {
+           outline: none;
+       }
+
+      html{
+        background:pink;
+        font-family:sans-serif;
+        }
+        body{
+         margin:20px;
+         padding:10px;
+         background:tan;
+      }
+    .header{
+       display:flex;
+       justify-content:space-between;
+       }
+      .comment{
+        display:flex;
+        justify-content:space-between;
+        background:white;
+        padding:10px;
+        margin:10px;
+        }
+        .deleteAndUpdate{
+         display:flex;
+         flex-direction:column;
+         justify-content:space-around;
+         flex-wrap:wrap;
+         }
+         a{
+         text-decoration:none;
+         }
+         .Post > h1 ,.name-and-date{
+           display:flex;
+           flex-direction:column;
+           align-items:center;
+           }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>My Blog Application</h2>
+    <a href="/loginPage">Login</a>
+    <th:block  sec:authorize="hasRole('AUTHOR')">
+    <th:block th:if="${#authentication.name} == ${post.author}">
+                     <div class="deleteButton">
+                          <a th:href="@{'/deletepost/'+${post.getId()}}">Delete</a></br></br>
+                          <a th:href="@{'/updatepost/'+${post.getId()}}">Update</a>
+                      </div>
+    </th:block>
+    </th:block>
+    <th:block  sec:authorize="hasRole('ADMIN')">
+      <div class="deleteButton">
+        <a th:href="@{'/deletepost/'+${post.getId()}}">Delete</a></br></br>
+        <a th:href="@{'/updatepost/'+${post.getId()}}">Update</a>
+      </div>
+    </th:block>
+  </div>
+  <div class="Post">
+    <h1 th:text="${post.title}"></h1>
+    <div class="name-and-date">
+      <p th:text="${post.author}"></p>
+      <p th:text="${post.createdAt}"></p>
+      <div class="tags">
+            <span th:each="tobj:${post.getTags()}">
+            <p style="display:inline-block">@</p><p th:text="${tobj.getName()}" style="display:inline-block"></p>
+        </span>
+    </div>
+    <p th:text="${post.content}"></p>
+  </div>
+<div class="comments">
+  <h2>Comments</h2>
+  <div class="comment" th:each="obj:${commentList}" >
+    <div class="comment-part">
+      <p th:text="${obj.name}"></p>
+<!--      <p th:text="${obj.email}"></p>-->
+      <p th:text="${obj.comment}"></p>
+    </div>
+    <th:block  sec:authorize="hasRole('ADMIN')">
+      <div class="deleteAndUpdate">
+        <a th:href="'/updateComment/'+${obj.id}">Edit</a>
+        <a th:href="'/deleteComment/'+${obj.id}">Delete</a>
+      </div>
+    </th:block>
+    <th:block  sec:authorize="hasRole('AUTHOR')">
+    <th:block th:if="${#authentication.name} == ${obj.name}">
+      <div class="deleteAndUpdate">
+        <a th:href="'/updateComment/'+${obj.id}">Edit</a>
+        <a th:href="'/deleteComment/'+${obj.id}">Delete</a>
+      </div>
+    </th:block>
+    </th:block>
+  </div>
+  <h2>Write Comment</h2>
+  <form action="#" th:action="@{'/processComment/'+${postid}}" th:object="${comments}">
+    <input type="hidden" th:field="*{id}" value="comment_id">
+    <input type="text" th:field="*{email}" placeholder="email"></br></br>
+    <textarea th:field="*{comment}" placeholder="write comment here..."></textarea></br></br>
+    <input type="submit" value="submit">
+  </form>
+</div>
+</body>
+</html>

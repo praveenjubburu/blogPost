@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>User Login</title>
+
+  <style>
+     .form-body{
+              display:flex;
+              flex-direction:column;
+              justify-content:center;
+              align-items:center;
+              height:100vh;
+
+              }
+      form{
+              padding:40px;
+              border:1px solid black;
+              }
+     .registration{
+               text-align:center;
+               }
+    </style>
+</head>
+<body>
+<div class="form-body">
+  <h1>Create Account</h1>
+  <form action="#" th:action="@{/regcompleted}" method="get" th:object="${user}">
+    <p>Full name:</p>
+    <input type="text" th:field="*{name}" /><br/></br>
+
+    <p>E-mail:</p>
+    <input type="text" th:field="*{email}" /><br/></br>
+
+
+    <p>Password:</p>
+    <input type="text" th:field="*{password}" /></br></br>
+
+    <p>Confirm Password</p>
+    <input type="text" name="repeans"></br></br>
+    <button type="submit">Create Account</button>
+  </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New/Edit</title>
+    <style>
+        body{
+        background:pink;
+        }
+       .form-body{
+          margin-left:30px;
+          margin-right:30px;
+          }
+          .content{
+          width:90%;
+          border-radius:10px;
+          border:none;
+          height:300px;
+          }
+          .title{
+            border:none;
+          }
+          .tags{
+              border:none;
+              margin-bottom:10px;
+           }
+          body{
+          text-align:center;
+          }
+    </style>
+</head>
+<body>
+<div class="form-body">
+    <h1 id="head">NewPost</h1>
+    <form action="#" th:action="@{/processPost}" method="get" th:object="${posts}">
+        <p>Title</p>
+
+        <input type="hidden" th:field="*{id}" value="&{posts.id}">
+
+        <input type="text" th:field="*{title}" class="title"/><br/></br>
+
+        <input type="text" class="tags" name="tags" th:value="${tags}">
+
+        <textarea th:field="*{content}" class="content"></textarea><br/></br>
+
+        <button type="submit">Publish</button>
+
+    </form>
+</div>
+</body>
+</html>

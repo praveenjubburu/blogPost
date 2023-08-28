@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+    <style>
+        body{
+        text-align:center;
+        font-family:sans-serif;
+        }
+    </style>
+</head>
+<body>
+<h1>500</h1>
+<h1>Something Bad Happens</h1>
+<h1 th:text="${msg}"></h1>
+<h2>We will resolve this issue and get back to you.....back to <a href="/displaydata">Home</a></h2>
+</body>
+</html>

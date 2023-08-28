@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Posts</title>
+    <style>
+      body{
+       overflow:hidden;
+       background:pink;
+       font-family:sans-serif;
+       }
+       .nav-bar{
+        display:flex;
+        position:sticky;
+        flex-direction:row;
+        margin-bottom:20px;
+        justify-content:space-between;
+        }
+     .flexpart{
+               font-family:sans-serif;
+               background:white;
+               }
+     .flexboxes{
+               padding:30px;
+               width:750px;
+               height:150px;
+               margin:10px;
+               overflow:hidden;
+               background:tan;
+               }
+            a {
+                text-decoration: none;
+              }
+      .deleteButton{
+            float:right;
+           }
+     .header{
+         display:flex;
+         font-family:sans-serif;
+         flex-direction:column;
+         justify-content:space-around;
+         }
+      .form{
+        margin-bottom:5px;
+        }
+       .filter{
+          margin-left:5px;
+          height:40px;
+          font-size:15px;
+          }
+        .sort{
+         margin-left:5px;
+         height:40px;
+         font-size:15px;
+         }
+         .writepost{
+         color:black;
+         top:40px;
+         }
+         .filter-container{
+            width:250px;
+            height:80vh;
+            overflow-y: scroll;
+          }
+         .author-container{
+         display:flex;
+         flex-direction:column;
+         flex-wrap: wrap;
+         background-color:tan;
+         }
+         .tags-container{
+          display:flex;
+         flex-direction:column;
+         flex-wrap: wrap;
+         background-color:tan;
+         }
+         .publishedAt-container{
+         height:100px;
+          display:flex;
+         flex-direction:column;
+         flex-wrap: wrap;
+          background-color:tan;
+          }
+          .check-box{
+              width:200px;
+              background-color:white;
+              margin:10px;
+           }
+           .filter-container{
+
+           }
+           .submit{
+           width:100%;
+           background-color:orange;
+           height:40px;
+           }
+           .mid-part{
+           display:flex;
+           flex-direction:row;
+           }
+           .mid-part-flex{
+           width:100%;
+           display:flex;
+           flex-direction:row;
+           flex-wrap:wrap;
+           align-content:flex-start;
+           }
+           .footer{
+           display:flex;
+           margin-bottom:10px;
+           justify-content:center;
+           }
+           .header a{
+            color:black;
+            font-family:sans-serif;
+            }
+          .asc-btn, .desc-btn {
+              margin:5px;
+              padding: 10px 20px;
+              border: none;
+              border-radius: 5px;
+              color: #fff;
+              font-size: 16px;
+              cursor: pointer;
+              transition: background-color 0.3s;
+          }
+
+            .asc-btn {
+                background-color: #ff69b4;
+            }
+
+         .desc-btn {
+              background-color: #ff1493;
+         }
+
+         .asc-btn:hover {
+              background-color: #ff5e9e;
+          }
+
+        .desc-btn:hover {
+             background-color: #ff0d6f;
+        }
+          .filterandsort{
+              display:flex;
+              margin-top:30px;
+             flex-direction:row;
+           }
+           .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 10px;
+  margin: 0 5px;
+  background-color: #f2f2f2;
+  color: #333;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+  background-color: #333;
+  color: #f2f2f2;
+}
+    </style>
+</head>
+<body>
+<div class="nav-bar">
+    <div class="form">
+        <div class="header">
+            <h1><a href="/displaydata">My Blog Application</a></h1>
+        </div>
+        <form class="search" action="/pagingSearchController">
+            <input type="text" name="search">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div class="filterandsort">
+        <form action="#" th:action="'/sortByDesc/'+${currentPage}" method="post">
+            <input type="hidden" name="value" th:value="${value}">
+            <input type="hidden" name="subList" th:value="${{sortList}}"\>
+            <input type="submit" value="desc" class="desc-btn">
+        </form>
+        <form action="#" th:action="'/sortByAsc/'+${currentPage}" method="post">
+            <input type="hidden" name="value" th:value="${value}">
+            <input type="hidden" name="subList" th:value="${{sortList}}">
+            <input type="submit" value="asc" class="asc-btn">
+        </form>
+    </div>
+    <div>
+        <p>User : </p><span  sec:authentication="name"></span>
+        <a href="/loginPage">Login</a>
+    </div>
+    <div class="writepost">
+        <a href="/createpost">New Post</a>
+        <p>Search Results</p>
+        <p th:text="${size}"></p>
+    </div>
+</div>
+<div class="mid-part">
+    <div class="filter-container">
+        <form action="#" th:action="@{/pagingFilterController}">
+            <p>Author</p>
+            <div class="author-container">
+                <div th:each="obj:${authorList}" class="filter-box">
+                    <div class="check-box">
+                      <span th:if="${value=='filter'}">
+                           <input type="checkbox" name="AuthorId" style="display:inline-block"
+                                  th:value="${obj.getAuthor()}" th:checked="${checkList.contains(obj.author)}">
+                        <p th:text="${obj.author}" style="display:inline-block"></p></br>
+                      </span>
+                        <span th:if="${value!='filter'}">
+                           <input type="checkbox" name="AuthorId" style="display:inline-block"
+                                  th:value="${obj.getAuthor()}">
+                        <p th:text="${obj.author}" style="display:inline-block"></p></br>
+                      </span>
+                    </div>
+                </div>
+            </div>
+            <p>Tags</p>
+            <div class="tags-container">
+                <div th:each="obj:${tagsList}" class="filter-box">
+                    <div class="check-box">
+                        <span th:if="${value=='filter'}">
+                            <input type="checkbox" name="tagId" style="display:inline-block" th:value="${obj.getName()}" th:checked="${checkList.contains(obj.name)}">
+                             <p th:text="${obj.getName()}" style="display:inline-block"></p></br>
+                        </span>
+                        <span th:if="${value!='filter'}">
+                            <input type="checkbox" name="tagId" style="display:inline-block" th:value="${obj.getName()}">
+                             <p th:text="${obj.getName()}" style="display:inline-block"></p></br>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <p>Published Date</p>
+            <div class="publishedAt-container">
+                <div class="check-box-date">
+                    <label for="fromDate">From Date:</label>
+                    <input type="datetime-local" id="fromDate" name="fromDate" placeholder="DD-MM-YYYY">
+
+                    <label for="toDate">To Date:</label>
+                    <input type="datetime-local" id="toDate" name="toDate" placeholder="DD-MM-YYYY">
+                </div>
+            </div>
+            <input type="submit" value="submit" class="submit">
+        </form>
+    </div>
+    <div class="mid-part-flex">
+        <div class="flexpart" th:each="obj:${list}">
+            <div class="flexboxes">
+<!--                <div class="deleteButton">-->
+<!--                    <a th:href="@{'/deletepost/'+${obj.getId()}}">Delete</a></br></br>-->
+<!--                    <a th:href="@{'/updatepost/'+${obj.getId()}}">Update</a>-->
+<!--                </div>-->
+                <a th:href="@{'/showpost/'+${obj.getId()}}"><h1 th:text="${obj.title}"></h1></a>
+                <div class="tags">
+            <span th:each="tobj:${obj.getTags()}">
+            <p style="display:inline-block">@</p><p th:text="${tobj.getName()}" style="display:inline-block"></p>
+        </span>
+                </div>
+                <p th:text="${obj.author}"></p>
+                <p th:text="${obj.createdAt}"></p>
+                <p th:text="${obj.content}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="page">
+        <div class="pagination" th:if="${value} =='search'">
+            <i th:each="i : ${#numbers.sequence(0, totalPages-1)}">
+                <a th:if="${i != totalPages-1}" th:text="${i}"
+                   th:href="@{/pagingForSearch(pageNumber = ${i})}"></a>
+                <a th:if="${i == totalPages-1}" th:text="${i}"
+                   th:href="@{/pagingForSearch(pageNumber = ${i})}"></a>
+                <a th:if="${i == totalPages-1}" th:text="End"></a>
+            </i>
+        </div>
+        <div class="pagination" th:if="${value} =='main'">
+            <i th:each="i : ${#numbers.sequence(0, totalPages-1)}">
+                <a th:if="${i != totalPages-1}" th:text="${i}" th:href="@{/pagingController(pageNumber = ${i})}"></a>
+                <a th:if="${i == totalPages-1}" th:text="${i}" th:href="@{/pagingController(pageNumber = ${i})}"></a>
+                <a th:if="${i == totalPages-1}" th:text="End"></a>
+            </i>
+        </div>
+        <div class="pagination" th:if="${value} =='filter'">
+            <i th:each="i : ${#numbers.sequence(0, totalPages-1)}">
+                <a th:if="${i != totalPages-1}" th:text="${i}"
+                   th:href="@{/pagingForFilter(pageNumber = ${i})}"></a>
+                <a th:if="${i == totalPages-1}" th:text="${i}"
+                   th:href="@{/pagingForFilter(pageNumber = ${i})}"></a>
+                <a th:if="${i == totalPages-1}" th:text="End"></a>
+            </i>
+        </div>
+    </div>
+</div>
+</body>
+</html>
